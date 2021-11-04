@@ -73,11 +73,11 @@ int DispSel::CVSelect_thread(cv::Mat* costVol, const unsigned int maxDis, cv::Ma
 
 int DispSel::CVSelect(cv::Mat* costVol, const unsigned int maxDis, cv::Mat& dispMap)
 {
-    unsigned int hei = dispMap.rows;
+    int hei = dispMap.rows;
     unsigned int wid = dispMap.cols;
 
 	#pragma omp parallel for
-    for(unsigned int y = 0; y < hei; ++y)
+    for(decltype(hei) y = 0; y < hei; ++y)
     {
 		for(unsigned int x = 0; x < wid; ++x)
 		{
