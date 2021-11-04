@@ -136,5 +136,5 @@ int DispSel_cl::CVSelect(cl_mem *memoryObjects, Mat& ldispMap, Mat& rdispMap)
 	imshow("dispPreview", ldispMap);
 	cv::waitKey(0);
 
-//    return 0;
+	return 0;
 }
