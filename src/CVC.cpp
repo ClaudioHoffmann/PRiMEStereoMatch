@@ -45,18 +45,17 @@ int CVC::preprocess(const Mat& Img, Mat& GrdX)
 	return 0;
 }
 
-void *CVC::buildCV_left_thread(void *thread_arg)
+void CVC::buildCV_left_thread(buildCV_TD t_data)
 {
-    struct buildCV_TD *t_data = static_cast<struct buildCV_TD *>(thread_arg);
-    Mat *lImg = t_data->lImg;
-    Mat *rImg = t_data->rImg;
-    Mat *lGrdX = t_data->lGrdX;
-    Mat *rGrdX = t_data->rGrdX;
-    const int d = t_data->d;
-    Mat* costVol = t_data->costVol;
+    Mat *lImg = t_data.lImg;
+    Mat *rImg = t_data.rImg;
+    Mat *lGrdX = t_data.lGrdX;
+    Mat *rGrdX = t_data.rGrdX;
+    const int d = t_data.d;
+    Mat* costVol = t_data.costVol;
 
-	int hei = t_data->lImg->rows;
-	int wid = t_data->lImg->cols;
+	int hei = t_data.lImg->rows;
+	int wid = t_data.lImg->cols;
 
 	for( int y = 0; y < hei; ++y) {
 
@@ -78,20 +77,16 @@ void *CVC::buildCV_left_thread(void *thread_arg)
 			cost[x] = myCostGrd( lC, lG );
 		}
 	}
-    return (void*)0;
-
 }
 
-void *CVC::buildCV_right_thread(void *thread_arg)
+void CVC::buildCV_right_thread(buildCV_TD t_data)
 {
-    struct buildCV_TD *t_data;
-    t_data = (struct buildCV_TD *) thread_arg;
-    const Mat *lImg = t_data->lImg;
-    const Mat *rImg = t_data->rImg;
-    const Mat *lGrdX = t_data->lGrdX;
-    const Mat *rGrdX = t_data->rGrdX;
-    const int d = t_data->d;
-    Mat* costVol = t_data->costVol;
+    const Mat *lImg = t_data.lImg;
+    const Mat *rImg = t_data.rImg;
+    const Mat *lGrdX = t_data.lGrdX;
+    const Mat *rGrdX = t_data.rGrdX;
+    const int d = t_data.d;
+    Mat* costVol = t_data.costVol;
 
 	int hei = lImg->rows;
 	int wid = lImg->cols;
@@ -115,8 +110,6 @@ void *CVC::buildCV_right_thread(void *thread_arg)
 			cost[x] = myCostGrd( lC, lG );
 		}
 	}
-
-    return (void*)0;
 }
 
 int CVC::buildCV_left(const Mat& lImg, const Mat& rImg, const Mat& lGrdX, const Mat& rGrdX, const int d, Mat& costVol)

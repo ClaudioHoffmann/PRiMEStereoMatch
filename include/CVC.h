@@ -24,6 +24,16 @@
 #define ALPHA_32UI (unsigned int)(0.9f*UINT_MAX)
 #define ALPHA_16U 0.9
 
+//CVC thread data struct
+struct buildCV_TD{
+	Mat* lImg;
+	Mat* rImg;
+	Mat* lGrdX;
+	Mat* rGrdX;
+	int d;
+	Mat* costVol;
+};
+
 //
 // TAD + GRD for Cost Computation
 //
@@ -35,19 +45,9 @@ public:
 
 	int preprocess(const Mat& Img, Mat& GrdX);
 
-	static void *buildCV_left_thread(void *thread_arg);
-	static void *buildCV_right_thread(void *thread_arg);
+	static void buildCV_left_thread(buildCV_TD t_data);
+	static void buildCV_right_thread(buildCV_TD t_data);
 
 	int buildCV_left(const Mat& lImg, const Mat& rImg, const Mat& lGrdX, const Mat& rGrdX, const int d, Mat& costVol);
 	int buildCV_right(const Mat& lImg, const Mat& rImg, const Mat& lGrdX, const Mat& rGrdX, const int d, Mat& costVol);
-};
-
-//CVC thread data struct
-struct buildCV_TD{
-	Mat* lImg;
-	Mat* rImg;
-	Mat* lGrdX;
-	Mat* rGrdX;
-	int d;
-	Mat* costVol;
 };

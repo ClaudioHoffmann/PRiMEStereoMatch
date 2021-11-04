@@ -48,7 +48,7 @@ DispEst::DispEst(cv::Mat l, cv::Mat r, const int d, int t, bool ocl)
 	lValid = cv::Mat::zeros(hei, wid, CV_8UC1);
 	rValid = cv::Mat::zeros(hei, wid, CV_8UC1);
 
-	printf("Setting up pthreads function constructors\n");
+	printf("Setting up thread function constructors\n");
     constructor = new CVC();
     filter = new CVF();
     selector = new DispSel();
@@ -222,12 +222,7 @@ int DispEst::CostConst()
 int DispEst::CostConst_CPU()
 {
     //Set up threads and thread attributes
-    void *status;
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    pthread_t BCV_threads[maxDis];
-    buildCV_TD buildCV_TD_Array[maxDis];
+	std::vector<std::thread> BCV_threads(maxDis);
 
 	constructor->preprocess(lImg, lGrdX);
 	constructor->preprocess(rImg, rGrdX);
@@ -240,13 +235,14 @@ int DispEst::CostConst_CPU()
 	    for(int iter=0; iter < block_size; ++iter)
 	    {
 	        int d = level*threads + iter;
-            buildCV_TD_Array[d] = {&lImg, &rImg, &lGrdX, &rGrdX, d, &lcostVol[d]};
-            pthread_create(&BCV_threads[d], &attr, CVC::buildCV_left_thread, (void *)&buildCV_TD_Array[d]);
+			BCV_threads[d] = std::thread(
+				CVC::buildCV_left_thread, buildCV_TD{ &lImg, &rImg, &lGrdX, &rGrdX, d, &lcostVol[d] }
+			);
 	    }
         for(int iter=0; iter < block_size; ++iter)
 	    {
 	        int d = level*threads + iter;
-            pthread_join(BCV_threads[d], &status);
+			BCV_threads[d].join();
         }
 	}
 	for(int level = 0; level <= maxDis/threads; ++level)
@@ -257,13 +253,14 @@ int DispEst::CostConst_CPU()
 	    for(int iter=0; iter < block_size; ++iter)
 	    {
 	        int d = level*threads + iter;
-            buildCV_TD_Array[d] = {&rImg, &lImg, &rGrdX, &lGrdX, d, &rcostVol[d]};
-            pthread_create(&BCV_threads[d], &attr, CVC::buildCV_right_thread, (void *)&buildCV_TD_Array[d]);
+			BCV_threads[d] = std::thread(
+				CVC::buildCV_right_thread, buildCV_TD{ &rImg, &lImg, &rGrdX, &lGrdX, d, &rcostVol[d] }
+			);
 	    }
         for(int iter=0; iter < block_size; ++iter)
 	    {
 	        int d = level*threads + iter;
-            pthread_join(BCV_threads[d], &status);
+			BCV_threads[d].join();
         }
 	}
 	return 0;

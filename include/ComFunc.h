@@ -20,9 +20,6 @@
 #include <omp.h>
 #include <mutex>
 
-//POSIX Threads
-#include <pthread.h>
-
 //OpenCL Header
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
 #ifdef __APPLE__

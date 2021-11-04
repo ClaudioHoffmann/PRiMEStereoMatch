@@ -16,15 +16,6 @@ add_executable(PRiMEStereoMatch ${SOURCES})
 set_property(TARGET PRiMEStereoMatch PROPERTY CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-#pthread libraries
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-if(Threads_FOUND)
-	include_directories(${THREAD_INCLUDE_DIRS})
-else(Threads_FOUND)
-	message(FATAL_ERROR ">> Some form of threading library is requried for compilation, preferably PThreads.")
-endif(Threads_FOUND)
-
 #OpenCV libraries
 find_package(OpenCV REQUIRED COMPONENTS core calib3d imgproc highgui video)
 if(OpenCV_FOUND)
@@ -56,6 +47,4 @@ endif(OpenMP_FOUND)
 #Can still compile without OpenCL
 if(OpenCV_FOUND AND OpenMP_FOUND)
 	target_link_libraries(PRiMEStereoMatch ${CMAKE_THREAD_LIBS_INIT} ${OpenCV_LIBS} ${OpenCL_LIBRARIES} 	${OpenMP_LIBRARIES})
-else(OpenCV_FOUND AND OpenMP_FOUND)
-	message(FATAL_ERROR ">> Some form of threading library is requried for compilation, preferably PThreads.")
 endif(OpenCV_FOUND AND OpenMP_FOUND)

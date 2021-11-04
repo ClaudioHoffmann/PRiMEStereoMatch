@@ -246,19 +246,17 @@ void wgtMedian(const Mat& lImg, const Mat& rImg, Mat& lDis, Mat& rDis, Mat& lVal
     return;
 }
 
-void *wgtMed_row(void *thread_arg)
+void wgtMed_row(WM_row_TD t_data)
 {
 	//Passing function arguments from wgtMedian_thread
-    struct WM_row_TD *t_data;
-    t_data = (struct WM_row_TD *) thread_arg;
     //Matricies
-    const Mat* Img = t_data->Img;
-    Mat* Dis = t_data->Dis;
+    const Mat* Img = t_data.Img;
+    Mat* Dis = t_data.Dis;
     //Pointers
-    uchar *pValid = t_data->pValid;
+    uchar *pValid = t_data.pValid;
     //Variables
-    int y = t_data->y;
-    int maxDis  = t_data->maxDis;
+    int y = t_data.y;
+    int maxDis  = t_data.maxDis;
 
     int wndR = MED_SZ / 2;
     int hei  = Img->rows;
@@ -360,7 +358,6 @@ void *wgtMed_row(void *thread_arg)
 //		printf("PP: Error - Unrecognised data type in processing! (wgtMed_row)\n");
 //		exit(1);
 //    }
-	return (void*)0;
 }
 
 void wgtMedian_thread(const Mat& Img, Mat& Dis, Mat& Valid, const int maxDis, const int threads)
@@ -368,12 +365,7 @@ void wgtMedian_thread(const Mat& Img, Mat& Dis, Mat& Valid, const int maxDis, co
     int hei = Img.rows;
 
 	//Set up threads for x-loop
-    void* status;
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    pthread_t WM_row_threads[hei];
-    WM_row_TD WM_row_TD_Array[hei];
+    std::vector<std::thread> WM_row_threads(hei);
 
 	for(int level = 0; level <= hei/threads; level ++)
 	{
@@ -385,14 +377,13 @@ void wgtMedian_thread(const Mat& Img, Mat& Dis, Mat& Valid, const int maxDis, co
 	        int d = level*threads + iter;
 			uchar* ValidData = (uchar*) Valid.ptr<uchar>(d);
 
-            WM_row_TD_Array[d] = {&Img, &Dis, ValidData, d, maxDis};
-            pthread_create(&WM_row_threads[d], &attr, wgtMed_row, (void *)&WM_row_TD_Array[d]);
+            WM_row_threads[d] = std::thread(wgtMed_row, WM_row_TD{ &Img, &Dis, ValidData, d, maxDis });
             //printf("WM Filtering Disparity Map @ y = %d\n", d);
 	    }
         for(int iter=0; iter < block_size; iter++)
 	    {
 	        int d = level*threads + iter;
-            pthread_join(WM_row_threads[d], &status);
+            WM_row_threads[d].join();
             //printf("Joining WM Filtering @ y = %d\n", d);
         }
 	}

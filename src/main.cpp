@@ -109,14 +109,14 @@ void HCI(StereoMatch *sm)
                 printf("|   d:   Cycle between images datasets:\n");
 				printf("|   d:   	Art, Books, Cones, Dolls, Laundry, Moebius, Teddy.n");
                 printf("|   m:   Switch computation mode:\n");
-                printf("|   m:      STEREO_GIF:  OpenCL <-> pthreads.\n");
+                printf("|   m:      STEREO_GIF:  OpenCL <-> std::threads.\n");
                 printf("|   m:      STEREO_SGBM: MODE_SGBM, MODE_HH, MODE_SGBM_3WAY\n");
                 printf("|   -/=: Increase or decrease the error threshold\n");
                 printf("|-------------------------------------------------------------------|\n");
                 printf("| Current Options:\n");
                 printf("|   a:   Matching Algorithm: %s\n", sm->MatchingAlgorithm ? "STEREO_GIF" : "STEREO_SGBM");
                 printf("|   d:   Dataset: %s\n", sm->MatchingAlgorithm ? "STEREO_GIF" : "STEREO_SGBM");
-                printf("|   m:   Computation mode: %s\n", sm->MatchingAlgorithm ? (sm->de_mode ? "OpenCL" : "pthreads") : (
+                printf("|   m:   Computation mode: %s\n", sm->MatchingAlgorithm ? (sm->de_mode ? "OpenCL" : "std::threads") : (
 														sgbm_mode == StereoSGBM::MODE_HH ? "MODE_HH" :
 														sgbm_mode == StereoSGBM::MODE_SGBM ? "MODE_SGBM" : "MODE_SGBM_3WAY" ));
                 printf("|   -/=: Error Threshold: %d\n", sm->error_threshold);
@@ -150,7 +150,7 @@ void HCI(StereoMatch *sm)
 					if(nOpenCLDev){
 						sm->de_mode = sm->de_mode ? OCV_DE : OCL_DE;
 						printf("| m: STEREO_GIF Matching Algorithm:\n");
-						printf("| m: Mode changed to %s |\n", sm->de_mode ? "OpenCL on the GPU" : "C++ & pthreads on the CPU");
+						printf("| m: Mode changed to %s |\n", sm->de_mode ? "OpenCL on the GPU" : "C++ & std::threads on the CPU");
 					}
 					else{
 						printf("| m: Platform must contain an OpenCL compatible device to use OpenCL Mode.\n");

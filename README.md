@@ -27,7 +27,7 @@ A heterogeneous and fully parallel stereo matching algorithm for depth estimatio
 ## Implementation Details
 
 * All stages of the algorithm have been developed in both C++ and OpenCL.
-	* C++ parallelism is introduced via the POSIX threads (pthreads) library. Disparity level parallelism is supported, enabling up to 64 concurrent threads.
+	* C++ parallelism is introduced via standard `std::thread`s. Disparity level parallelism is supported, enabling up to 64 concurrent threads.
 	* OpenCL parallelism is inherent through the concurrent execution of kernels on an OpenCL-compatible device. The optimum level of parallelism will be bounded by the platform & devices.
 * Support for live video disparity estimation using the OpenCV VideoCapture interface as well as static image computation.
 * Additional integration of the OpenCV Semi-Global Block Matching (SGBM) algorithm.
@@ -40,7 +40,6 @@ A heterogeneous and fully parallel stereo matching algorithm for depth estimatio
 	* Stereo Camera - to use the algorithm in video mode - the [ZED Stereo Camera](https://www.stereolabs.com/) is used in our experimentation.
 * Software Libraries:
 	* OpenCV 4.5 or later. [Compile from source](https://docs.opencv.org/4.5.4/d7/d9f/tutorial_linux_install.html), or use your distribution's pre-built package.
-	* pthread library for non-OpenCL execution on the CPU
 	* OpenCL Library for execution on the GPU
 	* cmake v3.2, git
 
@@ -84,8 +83,8 @@ A heterogeneous and fully parallel stereo matching algorithm for depth estimatio
 * Control Options:
 	* Matching Algorithm (a): STEREO_GIF or STEREO_SGBM
 	* STEREO_GIF:
-		* Numbers 1 - 8: (CPU only) change the number of simultaneous pthreads created
-		* m: switch the computational mode between OpenCL (GPU) and pthreads (CPU)
+		* Numbers 1 - 8: (CPU only) change the number of simultaneous threads created
+		* m: switch the computational mode between OpenCL (GPU) and threads (CPU)
 		* t: switch the data type use for processing between 32-bit float and 8-bit char
 	* STEREO_SGBM:
 		* m: switch the computational mode between MODE_SGBM, MODE_HH and MODE_SGDM_3WAY
