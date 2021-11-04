@@ -169,12 +169,12 @@ void wgtMedian(const Mat& lImg, const Mat& rImg, Mat& lDis, Mat& rDis, Mat& lVal
                         int qx = ( x + wx + wid ) % wid;
                         int qDep = qDisData[ qx ];
                         if( qDep != 0 ) {
-                            float disWgt = wx * wx + wy * wy;
+                            auto disWgt = static_cast<float>(wx * wx + wy * wy);
                             float clrWgt =
 								( pL[ 3 * x ] - qL[ 3 * qx ] ) * ( pL[ 3 * x ] - qL[ 3 * qx ] ) +
                                 ( pL[ 3 * x + 1 ] - qL[ 3 * qx + 1 ] ) * ( pL[ 3 * x + 1 ] - qL[ 3 * qx + 1 ] ) +
                                 ( pL[ 3 * x + 2 ] - qL[ 3 * qx + 2 ] ) * ( pL[ 3 * x + 2 ] - qL[ 3 * qx + 2 ] );
-                            float biWgt = exp( - disWgt / ( SIG_DIS * SIG_DIS ) - clrWgt / ( SIG_CLR * SIG_CLR ) );
+                            float biWgt = expf( - disWgt / ( SIG_DIS * SIG_DIS ) - clrWgt / ( SIG_CLR * SIG_CLR ) );
                             disHist[ qDep ] += biWgt;
                             sumWgt += biWgt;
                         }
@@ -215,14 +215,14 @@ void wgtMedian(const Mat& lImg, const Mat& rImg, Mat& lDis, Mat& rDis, Mat& lVal
                         int qx = ( x + wx + wid ) % wid;
                         int qDep = qDisData[ qx ];
                         if( qDep != 0 ) {
-                            float disWgt = wx * wx + wy * wy;
+                            auto disWgt = static_cast<float>(wx * wx + wy * wy);
                             disWgt = sqrt( disWgt );
                             float clrWgt =
                                 ( pR[ 3 * x ] - qR[ 3 * qx ] ) * ( pR[ 3 * x ] - qR[ 3 * qx ] ) +
                                 ( pR[ 3 * x + 1 ] - qR[ 3 * qx + 1 ] ) * ( pR[ 3 * x + 1 ] - qR[ 3 * qx + 1 ] ) +
                                 ( pR[ 3 * x + 2 ] - qR[ 3 * qx + 2 ] ) * ( pR[ 3 * x + 2 ] - qR[ 3 * qx + 2 ] );
                             clrWgt = sqrt( clrWgt );
-                            float biWgt = exp( - disWgt / ( SIG_DIS * SIG_DIS ) - clrWgt / ( SIG_CLR * SIG_CLR ) );
+                            float biWgt = expf( - disWgt / ( SIG_DIS * SIG_DIS ) - clrWgt / ( SIG_CLR * SIG_CLR ) );
                             disHist[ qDep ] += biWgt;
                             sumWgt += biWgt;
                         }
@@ -285,7 +285,7 @@ void *wgtMed_row(void *thread_arg)
 						// invalid pixel also used
 						int qDep = qDisData[ qx ];
 						if( qDep != 0 ) {
-							float disWgt = wx * wx + wy * wy;
+							auto disWgt = static_cast<float>(wx * wx + wy * wy);
 							float clrWgt =
 								( p[ 3 * x ] - q[ 3 * qx ] ) * ( p[ 3 * x ] - q[ 3 * qx ] ) +
 								( p[ 3 * x + 1 ] - q[ 3 * qx + 1 ] ) * ( p[ 3 * x + 1 ] - q[ 3 * qx + 1 ] ) +

@@ -9,7 +9,7 @@
 
 // CVPR 11
 #define BORDER_THRES 0.011764
-#define BC_32F 1.0
+#define BC_32F 1.0f
 #define BC_32UI  UINT_MAX
 #define BC_8U  UCHAR_MAX
 

@@ -302,9 +302,9 @@ int StereoMatch::compute(float& de_time_ms)
 		}
 		cvtColor(eDispMap, errDispMap, cv::COLOR_GRAY2RGB);
 
-		float avg_err = cv::mean(eDispMap)[0]/(CHAR_MAX/maxDis);
+		auto avg_err = cv::mean(eDispMap)[0]/(CHAR_MAX/maxDis);
 		unsigned int num_bad_pixels = (unsigned int)cv::countNonZero(eDispMap);
-		float num_pixels = gtFrame.cols*gtFrame.rows;
+		auto num_pixels = static_cast<float>(gtFrame.cols*gtFrame.rows);
 #ifdef DEBUG_APP_MONITORS
 		printf("%%BP = %.2f%% \t Avg Err = %.2f\n", num_bad_pixels*100/num_pixels, avg_err);
 #endif //DEBUG_APP_MONITORS
@@ -370,12 +370,12 @@ std::vector<Resolution> StereoMatch::resolution_search(void)
 			cap.set(CAP_PROP_FRAME_HEIGHT, test_hei);
 			cap.set(CAP_PROP_FRAME_WIDTH, (unsigned int)(test_hei*aspect_ratios[ar_idx]*stereo_multiplier));
 
-			ret_hei = cap.get(CAP_PROP_FRAME_HEIGHT);
+			ret_hei = static_cast<unsigned int>(cap.get(CAP_PROP_FRAME_HEIGHT));
 			//std::cout << " ret_hei: " << ret_hei << std::endl;
 
 			if(ret_hei != curr_hei)
 			{
-				ret_wid = cap.get(CAP_PROP_FRAME_WIDTH);
+				ret_wid = static_cast<unsigned int>(cap.get(CAP_PROP_FRAME_WIDTH));
 				valid_res.push_back({ret_hei, ret_wid});
 				std::cout << "Found new resolution: " <<  ret_hei << " x " << ret_wid << std::endl;
 			}

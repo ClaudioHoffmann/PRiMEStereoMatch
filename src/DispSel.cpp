@@ -31,7 +31,7 @@ void *DS_X(void *thread_arg)
 
 	for(int x = 0; x < wid; ++x)
 	{
-		float minCost = DBL_MAX;
+		auto minCost = std::numeric_limits<float>::max();
 		int minDis = 0;
 
 		for(int d = 1; d < maxDis; ++d)
@@ -90,7 +90,7 @@ int DispSel::CVSelect(cv::Mat* costVol, const unsigned int maxDis, cv::Mat& disp
     {
 		for(unsigned int x = 0; x < wid; ++x)
 		{
-			float minCost = DBL_MAX;
+			auto minCost = std::numeric_limits<float>::max();
 			int minDis = 0;
 
 			for(unsigned int d = 1; d < maxDis; ++d)

@@ -10,7 +10,7 @@
 #include "JointWMF.h"
 
 #define MED_SZ 19
-#define SIG_CLR 0.1
+#define SIG_CLR 0.1f
 #define SIG_DIS 9
 
 //

@@ -18,9 +18,9 @@ CVC::~CVC(void) {}
 float myCostGrd(float* lC, float* rC, float* lG, float* rG)
 {
     // three color diff
-	float clrDiff = fabs(lC[0] - rC[0]) + fabs(lC[1] - rC[1]) + fabs(lC[2] - rC[2]);
+	float clrDiff = fabsf(lC[0] - rC[0]) + fabsf(lC[1] - rC[1]) + fabsf(lC[2] - rC[2]);
     // gradient diff
-    float grdDiff = fabs(*lG - *rG);
+    float grdDiff = fabsf(*lG - *rG);
     //clrDiff = clrDiff > TAU_1_32F ? TAU_1_32F : clrDiff;    //TAU_1 0.028
     //grdDiff = grdDiff > TAU_2_32F ? TAU_2_32F : grdDiff;    // TAU_2 0.008
     return ALPHA_32F * clrDiff + (1 - ALPHA_32F) * grdDiff;   // ALPHA 0.9
@@ -30,9 +30,9 @@ float myCostGrd(float* lC, float* rC, float* lG, float* rG)
 float myCostGrd(float* lC, float* lG)
 {
     // three color diff
-    float clrDiff = fabs(lC[0] - BC_32F) + fabs(lC[1] - BC_32F) + fabs(lC[2] - BC_32F);
+    float clrDiff = fabsf(lC[0] - BC_32F) + fabsf(lC[1] - BC_32F) + fabsf(lC[2] - BC_32F);
     // gradient diff
-    float grdDiff = fabs(*lG - BC_32F);
+    float grdDiff = fabsf(*lG - BC_32F);
     //clrDiff = clrDiff > TAU_1_32F ? TAU_1_32F : clrDiff;
     //grdDiff = grdDiff > TAU_2_32F ? TAU_2_32F : grdDiff;
     return ALPHA_32F * clrDiff + (1 - ALPHA_32F) * grdDiff;
