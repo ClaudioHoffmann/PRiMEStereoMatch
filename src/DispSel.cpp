@@ -48,7 +48,7 @@ void *DS_X(void *thread_arg)
 	return (void*)0;
 }
 
-int DispSel::CVSelect_thread(cv::Mat* costVol, const unsigned int maxDis, cv::Mat& dispMap, int threads)
+int DispSel::CVSelect_thread(cv::Mat* costVol, const unsigned int maxDis, cv::Mat& dispMap, unsigned int threads)
 {
     unsigned int hei = dispMap.rows;
 
@@ -60,7 +60,7 @@ int DispSel::CVSelect_thread(cv::Mat* costVol, const unsigned int maxDis, cv::Ma
     pthread_t DS_X_threads[hei];
     DS_X_TD DS_X_TD_Array[hei];
 
-    for(int level = 0; level <= hei/threads; ++level)
+    for(unsigned int level = 0; level <= hei/threads; ++level)
 	{
         //Handle remainder if threads is not power of 2.
 	    int block_size = (level < hei/threads) ? threads : (hei%threads);

@@ -370,7 +370,7 @@ std::vector<Resolution> StereoMatch::resolution_search(void)
 
 	for(int ar_idx = 0; ar_idx < sizeof(aspect_ratios)/sizeof(float); ++ar_idx)
 	{
-		for(int test_hei = 200; test_hei < max_hei; test_hei += 2)
+		while(test_hei < max_hei)
 		{
 			//std::cout << "Testing: " << test_hei << " x " << (unsigned int)(test_hei*aspect_ratios[ar_idx]*stereo_multiplier) << " AR = " << aspect_ratios[ar_idx];
 			cap.set(CAP_PROP_FRAME_HEIGHT, test_hei);
@@ -386,6 +386,8 @@ std::vector<Resolution> StereoMatch::resolution_search(void)
 				std::cout << "Found new resolution: " <<  ret_hei << " x " << ret_wid << std::endl;
 			}
 			curr_hei = ret_hei;
+
+			test_hei += 2;
 		}
 	}
 	std::cout << "Valid resolutions: " << std::endl;

@@ -14,7 +14,7 @@ public:
 	~DispSel();
 
 	int CVSelect(cv::Mat* costVol, const unsigned int maxDis, cv::Mat& dispMap);
-	int CVSelect_thread(cv::Mat* costVol, const unsigned int maxDis, cv::Mat& dispMap, int threads);
+	int CVSelect_thread(cv::Mat* costVol, const unsigned int maxDis, cv::Mat& dispMap, unsigned int threads);
 };
 
 struct DS_X_TD{Mat* costVol; cv::Mat* dispMap; int y; unsigned int maxDis;};
