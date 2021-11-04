@@ -28,7 +28,7 @@ int main(int argc, const char* argv[])
     //#############################################################################################################
 	nOpenCLDev = openCLdevicepoll();
 #ifdef DISPLAY
-	namedWindow("InputOutput", CV_WINDOW_AUTOSIZE);
+	namedWindow("InputOutput", cv::WINDOW_AUTOSIZE);
 #endif
 	//#############################################################################################################
     //# Start Application Processes

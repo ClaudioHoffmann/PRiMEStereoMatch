@@ -69,7 +69,7 @@ DispSel_cl::~DispSel_cl(void)
 int DispSel_cl::CVSelect(cl_mem *memoryObjects, Mat& ldispMap, Mat& rdispMap)
 {
 
-	cv::namedWindow("dispPreview", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("dispPreview", cv::WINDOW_AUTOSIZE);
 	cv::imshow("dispPreview", ldispMap);
 	cv::waitKey(0);
 

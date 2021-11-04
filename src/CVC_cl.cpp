@@ -97,8 +97,8 @@ int CVC_cl::buildCV(const Mat& lImg, const Mat& rImg, cl_mem *memoryObjects)
     split(lImg, lImgRGB);
     split(rImg, rImgRGB);
 
-	cvtColor(lImg, lGray, CV_RGB2GRAY);
-	cvtColor(rImg, rGray, CV_RGB2GRAY);
+	cvtColor(lImg, lGray, cv::COLOR_RGB2GRAY);
+	cvtColor(rImg, rGray, cv::COLOR_RGB2GRAY);
 
 	/* Map the input memory objects to host side pointers. */
 	bool EnqueueMapBufferSuccess = true;

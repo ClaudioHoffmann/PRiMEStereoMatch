@@ -39,7 +39,7 @@ A heterogeneous and fully parallel stereo matching algorithm for depth estimatio
 	* Development Platform - preferably including devices supporting OpenCL
 	* Stereo Camera - to use the algorithm in video mode - the [ZED Stereo Camera](https://www.stereolabs.com/) is used in our experimentation.
 * Software Libraries:
-	* OpenCV 3.0 or later - [Installation in Linux instructions](https://docs.opencv.org/3.4.0/d7/d9f/tutorial_linux_install.html)
+	* OpenCV 4.5 or later. [Compile from source](https://docs.opencv.org/4.5.4/d7/d9f/tutorial_linux_install.html), or use your distribution's pre-built package.
 	* pthread library for non-OpenCL execution on the CPU
 	* OpenCL Library for execution on the GPU
 	* cmake v3.2, git
