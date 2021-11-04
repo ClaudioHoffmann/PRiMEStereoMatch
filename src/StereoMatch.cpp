@@ -365,7 +365,7 @@ std::vector<Resolution> StereoMatch::resolution_search(void)
 	unsigned int test_hei = 200, max_hei = 2162;
 	float aspect_ratios[] = {4.f/3.f, 16.f/9.f};
 	unsigned int stereo_multiplier = 2;
-	unsigned int ret_hei, curr_hei, ret_wid;
+	unsigned int ret_hei, curr_hei = 0, ret_wid;
 	std::vector<Resolution> valid_res;
 
 	for(int ar_idx = 0; ar_idx < sizeof(aspect_ratios)/sizeof(float); ++ar_idx)
