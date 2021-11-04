@@ -40,7 +40,7 @@ if(OpenCL_FOUND)
 else(OpenCL_FOUND)
 	message(">> OpenCL not found. OpenCL is required for GPGPU/FPGA/Accelerator use.")
 endif(OpenCL_FOUND)
-	
+
 #OpenMP libraries
 find_package(OpenMP REQUIRED)
 if(OpenMP_FOUND)

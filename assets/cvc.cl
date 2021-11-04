@@ -71,27 +71,27 @@ __kernel void cvc_uchar_vx(__global const uchar* lImgR,
     for(int x = 0; x < d; x++)
     {
         // three color diff at img boundary
-        clrDiff = (abs(lImgR[offset + x] - UCHAR_MAX) 
-				+ abs(lImgG[offset + x] - UCHAR_MAX) 
+        clrDiff = (abs(lImgR[offset + x] - UCHAR_MAX)
+				+ abs(lImgG[offset + x] - UCHAR_MAX)
 				+ abs(lImgB[offset + x] - UCHAR_MAX))/3;
         // gradient diff
         grdDiff = abs(lGrdX[offset + x] - UCHAR_MAX);
-		
-		clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff; 
-		grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff; 
+
+		clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff;
+		grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff;
 		lcostVol[costVol_offset + x] = (uchar)( ALPHA * clrDiff + (1-ALPHA) * grdDiff );
 	}
     for(int x = d; x < width; x++)
     {
         // three color diff
-        clrDiff = (abs(lImgR[offset + x] - rImgR[offset + x - d]) 
-				+ abs(lImgG[offset + x] - rImgG[offset + x - d]) 
+        clrDiff = (abs(lImgR[offset + x] - rImgR[offset + x - d])
+				+ abs(lImgG[offset + x] - rImgG[offset + x - d])
 				+ abs(lImgB[offset + x] - rImgB[offset + x - d]))/3;
         // gradient diff
         grdDiff = abs(lGrdX[offset + x] - rGrdX[offset + x - d]);
 
-		clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff; 
-		grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff; 
+		clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff;
+		grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff;
 		lcostVol[costVol_offset + x] = (uchar)( ALPHA * clrDiff + (1-ALPHA) * grdDiff );
     }
 
@@ -100,27 +100,27 @@ __kernel void cvc_uchar_vx(__global const uchar* lImgR,
     for(int x = 0; x < width - d; x++)
     {
         // three color diff
-        clrDiff = (abs(rImgR[offset + x] - lImgR[offset + x + d]) 
-				+ abs(rImgG[offset + x] - lImgG[offset + x  + d]) 
+        clrDiff = (abs(rImgR[offset + x] - lImgR[offset + x + d])
+				+ abs(rImgG[offset + x] - lImgG[offset + x  + d])
 				+ abs(rImgB[offset + x] - lImgB[offset + x  + d])) * 0.333f;
         // gradient diff
         grdDiff = abs(rGrdX[offset] - lGrdX[offset + x  + d]);
 
-		clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff; 
-		grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff; 
+		clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff;
+		grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff;
 		rcostVol[costVol_offset + x] = (uchar)( ALPHA * clrDiff + (1-ALPHA) * grdDiff );
     }
     for(int x = width - d; x < width; x++)
 	{
         // three color diff at img boundary
-        clrDiff = (abs(rImgR[offset + x] - UCHAR_MAX) 
-				+ abs(rImgG[offset + x] - UCHAR_MAX) 
+        clrDiff = (abs(rImgR[offset + x] - UCHAR_MAX)
+				+ abs(rImgG[offset + x] - UCHAR_MAX)
 				+ abs(rImgB[offset + x] - UCHAR_MAX)) * 0.333f;
         // gradient diff
         grdDiff = abs(rGrdX[offset + x] - UCHAR_MAX);
 
-		clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff; 
-		grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff; 
+		clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff;
+		grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff;
 		rcostVol[costVol_offset + x] = (uchar)( ALPHA * clrDiff + (1-ALPHA) * grdDiff );
 	}
 }
@@ -172,7 +172,7 @@ __kernel void cvc_uchar_v16(__global const uchar* lImgR,
 	uchar16 rCR, rCG, rCB, rGX;
 
     ushort16 clrDiff, grdDiff;
-	
+
     if(x - d >= 0)
     {
     	rCR = vload16(0, rImgR + offset - d);
@@ -193,8 +193,8 @@ __kernel void cvc_uchar_v16(__global const uchar* lImgR,
         grdDiff = convert_ushort16(abs(lGX - UC16M));
     }
 
-    clrDiff = clrDiff > TAU_1_US16 ? TAU_1_US16 : clrDiff; 
-    grdDiff = grdDiff > TAU_2_US16 ? TAU_2_US16 : grdDiff; 
+    clrDiff = clrDiff > TAU_1_US16 ? TAU_1_US16 : clrDiff;
+    grdDiff = grdDiff > TAU_2_US16 ? TAU_2_US16 : grdDiff;
 	ushort16 cost = clrDiff/(ushort)9*(ushort)10 + grdDiff/(ushort)10;
     vstore16(convert_uchar16(cost), 0, lcostVol + costVol_offset);
 
@@ -229,8 +229,8 @@ __kernel void cvc_uchar_v16(__global const uchar* lImgR,
         grdDiff = convert_ushort16(abs(lGX - UC16M));
     }
 
-    clrDiff = clrDiff > TAU_1_US16 ? TAU_1_US16 : clrDiff; 
-    grdDiff = grdDiff > TAU_2_US16 ? TAU_2_US16 : grdDiff; 
+    clrDiff = clrDiff > TAU_1_US16 ? TAU_1_US16 : clrDiff;
+    grdDiff = grdDiff > TAU_2_US16 ? TAU_2_US16 : grdDiff;
 	cost = clrDiff/(ushort)9*(ushort)10 + grdDiff/(ushort)10;
     vstore16(convert_uchar16(cost), 0, rcostVol + costVol_offset);
 }
@@ -279,8 +279,8 @@ __kernel void cvc_uchar_nv(__global const uchar* lImgR,
     if(x >= d)
     {
         // three color diff
-        clrDiff = (abs(lImgR[offset] - rImgR[offset - d]) 
-				+ abs(lImgG[offset] - rImgG[offset - d]) 
+        clrDiff = (abs(lImgR[offset] - rImgR[offset - d])
+				+ abs(lImgG[offset] - rImgG[offset - d])
 				+ abs(lImgB[offset] - rImgB[offset - d]))/3;
         // gradient diff
         grdDiff = abs(lGrdX[offset] - rGrdX[offset - d]);
@@ -288,15 +288,15 @@ __kernel void cvc_uchar_nv(__global const uchar* lImgR,
     else
     {
         // three color diff at img boundary
-        clrDiff = (abs(lImgR[offset] - UCHAR_MAX) 
-				+ abs(lImgG[offset] - UCHAR_MAX) 
+        clrDiff = (abs(lImgR[offset] - UCHAR_MAX)
+				+ abs(lImgG[offset] - UCHAR_MAX)
 				+ abs(lImgB[offset] - UCHAR_MAX))/3;
         // gradient diff
         grdDiff = abs(lGrdX[offset] - UCHAR_MAX);
     }
 
-    clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff; 
-    grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff; 
+    clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff;
+    grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff;
     lcostVol[costVol_offset] = (uchar)( ALPHA * clrDiff + (1-ALPHA) * grdDiff );
 
 
@@ -307,8 +307,8 @@ __kernel void cvc_uchar_nv(__global const uchar* lImgR,
     if(x >= d)
     {
         // three color diff
-        clrDiff = (abs(rImgR[offset] - lImgR[offset + d]) 
-				+ abs(rImgG[offset] - lImgG[offset + d]) 
+        clrDiff = (abs(rImgR[offset] - lImgR[offset + d])
+				+ abs(rImgG[offset] - lImgG[offset + d])
 				+ abs(rImgB[offset] - lImgB[offset + d]))/3;
         // gradient diff
         grdDiff = abs(rGrdX[offset] - lGrdX[offset + d]);
@@ -316,15 +316,15 @@ __kernel void cvc_uchar_nv(__global const uchar* lImgR,
     else
     {
         // three color diff at img boundary
-        clrDiff = (abs(rImgR[offset] - UCHAR_MAX) 
-				+ abs(rImgG[offset] - UCHAR_MAX) 
+        clrDiff = (abs(rImgR[offset] - UCHAR_MAX)
+				+ abs(rImgG[offset] - UCHAR_MAX)
 				+ abs(rImgB[offset] - UCHAR_MAX))/3;
         // gradient diff
         grdDiff = abs(rGrdX[offset] - UCHAR_MAX);
     }
 
-    clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff; 
-    grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff; 
+    clrDiff = clrDiff > TAU_1_US ? TAU_1_US : clrDiff;
+    grdDiff = grdDiff > TAU_2_US ? TAU_2_US : grdDiff;
     rcostVol[costVol_offset] = (uchar)( ALPHA * clrDiff + (1-ALPHA) * grdDiff );
 }
 
@@ -372,8 +372,8 @@ __kernel void cvc_float_nv(__global const float* lImgR,
     if(x >= d)
     {
         // three color diff
-        clrDiff = (fabs(lImgR[offset] - rImgR[offset - d]) 
-				+ fabs(lImgG[offset] - rImgG[offset - d]) 
+        clrDiff = (fabs(lImgR[offset] - rImgR[offset - d])
+				+ fabs(lImgG[offset] - rImgG[offset - d])
 				+ fabs(lImgB[offset] - rImgB[offset - d]))/3;
         // gradient diff
         grdDiff = fabs(lGrdX[offset] - rGrdX[offset - d]);
@@ -381,15 +381,15 @@ __kernel void cvc_float_nv(__global const float* lImgR,
     else
     {
         // three color diff at img boundary
-        clrDiff = (fabs(lImgR[offset] - 1.0f) 
-				+ fabs(lImgG[offset] - 1.0f) 
+        clrDiff = (fabs(lImgR[offset] - 1.0f)
+				+ fabs(lImgG[offset] - 1.0f)
 				+ fabs(lImgB[offset] - 1.0f))/3;
         // gradient diff
         grdDiff = fabs(lGrdX[offset] - 1.0f);
     }
 
-    clrDiff = clrDiff > TAU_1_32F ? TAU_1_32F : clrDiff; 
-    grdDiff = grdDiff > TAU_2_32F ? TAU_2_32F : grdDiff; 
+    clrDiff = clrDiff > TAU_1_32F ? TAU_1_32F : clrDiff;
+    grdDiff = grdDiff > TAU_2_32F ? TAU_2_32F : grdDiff;
     lcostVol[costVol_offset] = ( ALPHA * clrDiff + (1-ALPHA) * grdDiff );
 
 
@@ -400,8 +400,8 @@ __kernel void cvc_float_nv(__global const float* lImgR,
     if(x >= d)
     {
         // three color diff
-        clrDiff = (fabs(rImgR[offset] - lImgR[offset + d]) 
-				+ fabs(rImgG[offset] - lImgG[offset + d]) 
+        clrDiff = (fabs(rImgR[offset] - lImgR[offset + d])
+				+ fabs(rImgG[offset] - lImgG[offset + d])
 				+ fabs(rImgB[offset] - lImgB[offset + d]))/3;
         // gradient diff
         grdDiff = fabs(rGrdX[offset] - lGrdX[offset + d]);
@@ -409,15 +409,15 @@ __kernel void cvc_float_nv(__global const float* lImgR,
     else
     {
         // three color diff at img boundary
-        clrDiff = (fabs(rImgR[offset] - 1.0f) 
-				+ fabs(rImgG[offset] - 1.0f) 
+        clrDiff = (fabs(rImgR[offset] - 1.0f)
+				+ fabs(rImgG[offset] - 1.0f)
 				+ fabs(rImgB[offset] - 1.0f))/3;
         // gradient diff
         grdDiff = fabs(rGrdX[offset] - 1.0f);
     }
 
-    clrDiff = clrDiff > TAU_1_32F ? TAU_1_32F : clrDiff; 
-    grdDiff = grdDiff > TAU_2_32F ? TAU_2_32F : grdDiff; 
+    clrDiff = clrDiff > TAU_1_32F ? TAU_1_32F : clrDiff;
+    grdDiff = grdDiff > TAU_2_32F ? TAU_2_32F : grdDiff;
     rcostVol[costVol_offset] = ( ALPHA * clrDiff + (1-ALPHA) * grdDiff );
 }
 

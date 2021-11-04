@@ -247,16 +247,16 @@ __kernel void var_math_32F(__global const float* mean_Ir,
     const int x = get_global_id(0);
     const int y = get_global_id(1);
     const int d = get_global_id(2);
-	
+
     const int offset = (((d * height) + y) * width) + x;
-	
+
 	var_Irr[offset] = mean_Irr[offset] - (mean_Ir[offset] * mean_Ir[offset]);
 	var_Irg[offset] = mean_Irg[offset] - (mean_Ir[offset] * mean_Ig[offset]);
 	var_Irb[offset] = mean_Irb[offset] - (mean_Ir[offset] * mean_Ib[offset]);
 	var_Igg[offset] = mean_Igg[offset] - (mean_Ig[offset] * mean_Ig[offset]);
 	var_Igb[offset] = mean_Igb[offset] - (mean_Ig[offset] * mean_Ib[offset]);
 	var_Ibb[offset] = mean_Ibb[offset] - (mean_Ib[offset] * mean_Ib[offset]);
-	
+
 }
 
 __kernel void cent_filter_32F(__global const float* mean_Ir,
@@ -282,10 +282,10 @@ __kernel void cent_filter_32F(__global const float* mean_Ir,
     const int y = get_global_id(1);
     const int d = get_global_id(2);
 	const float eps = 0.0001f;
-	
+
     const int offset3D = (((d * height) + y) * width) + x;
     const int offset2D = (y * width) + x;
-	
+
 	float c0 = cov_Ip_r[offset3D];
 	float c1 = cov_Ip_g[offset3D];
 	float c2 = cov_Ip_b[offset3D];
@@ -320,8 +320,8 @@ __kernel void cent_filter_32F(__global const float* mean_Ir,
 		);
 
 	mean_cv[offset3D] = mean_cv[offset3D] - (
-		(a_r[offset3D] * mean_Ir[offset2D]) + 
-		(a_g[offset3D] * mean_Ig[offset2D]) + 
+		(a_r[offset3D] * mean_Ir[offset2D]) +
+		(a_g[offset3D] * mean_Ig[offset2D]) +
 		(a_b[offset3D] * mean_Ib[offset2D])
 		);
 }
@@ -351,7 +351,7 @@ __kernel void EWMul_SameDim_8U(__global const uchar* pIn_a,
     const int offset = mul24(mul24(d, height) + y, width) + x;
 
 	pOut[offset] = mul24(pIn_a[offset], pIn_b[offset]);
-	
+
 }
 
 /**
@@ -513,16 +513,16 @@ __kernel void var_math_8U(__global const uchar* mean_Ir,
     const int x = get_global_id(0);
     const int y = get_global_id(1);
     const int d = get_global_id(2);
-	
+
     const int offset = mul24(mul24(d, height) + y, width) + x;
-	
+
 	var_Irr[offset] = mean_Irr[offset] - mul24(mean_Ir[offset] , mean_Ir[offset]);
 	var_Irg[offset] = mean_Irg[offset] - mul24(mean_Ir[offset] , mean_Ig[offset]);
 	var_Irb[offset] = mean_Irb[offset] - mul24(mean_Ir[offset] , mean_Ib[offset]);
 	var_Igg[offset] = mean_Igg[offset] - mul24(mean_Ig[offset] , mean_Ig[offset]);
 	var_Igb[offset] = mean_Igb[offset] - mul24(mean_Ig[offset] , mean_Ib[offset]);
 	var_Ibb[offset] = mean_Ibb[offset] - mul24(mean_Ib[offset] , mean_Ib[offset]);
-	
+
 }
 
 /**
@@ -560,7 +560,7 @@ __kernel void cent_filter_8U(__global const uchar* mean_Ir,
 
     const int offset3D = (((d * height) + y) * width) + x;
     const int offset2D = (y * width) + x;
-	
+
 	uchar c0 = cov_Ip_r[offset3D];
 	uchar c1 = cov_Ip_g[offset3D];
 	uchar c2 = cov_Ip_b[offset3D];
@@ -595,8 +595,8 @@ __kernel void cent_filter_8U(__global const uchar* mean_Ir,
 		);
 
 	mean_cv[offset3D] = mean_cv[offset3D] - (
-		(a_r[offset3D] * mean_Ir[offset2D]) + 
-		(a_g[offset3D] * mean_Ig[offset2D]) + 
+		(a_r[offset3D] * mean_Ir[offset2D]) +
+		(a_g[offset3D] * mean_Ig[offset2D]) +
 		(a_b[offset3D] * mean_Ib[offset2D])
 		);
 }
@@ -627,21 +627,21 @@ __kernel void BoxRows_32F(__global const float* fSource,
     fDest[offset] = sum * fScale;
 
     // Do the rest of the image
-    for(uint x = 1; x < uiWidth; x++) 
+    for(uint x = 1; x < uiWidth; x++)
     {
         sum += fSource[offset + x + iRadius];
         sum -= fSource[offset + x - iRadius - 1];
         fDest[offset + x] = sum * fScale;
-    }  
+    }
 }
 
 // Column kernel using coalesced global memory reads
 //*****************************************************************
-__kernel void BoxCols_32F(__global float* fInputImage, 
-						__global float* fOutputImage, 
-						unsigned int uiWidth, 
-						unsigned int uiHeight, 
-						int iRadius, 
+__kernel void BoxCols_32F(__global float* fInputImage,
+						__global float* fOutputImage,
+						unsigned int uiWidth,
+						unsigned int uiHeight,
+						int iRadius,
 						float fScale)
 {
 	size_t globalPosX = get_global_id(0);
@@ -653,20 +653,20 @@ __kernel void BoxCols_32F(__global float* fInputImage,
     // do left edge
     float fSum;
     fSum = fInputImage[0] * (float)(iRadius);
-    for (int y = 0; y < iRadius + 1; y++) 
+    for (int y = 0; y < iRadius + 1; y++)
     {
         fSum += fInputImage[y * uiWidth];
     }
     fOutputImage[0] = fSum * fScale;
-    for(int y = 1; y < iRadius + 1; y++) 
+    for(int y = 1; y < iRadius + 1; y++)
     {
         fSum += fInputImage[(y + iRadius) * uiWidth];
         fSum -= fInputImage[0];
         fOutputImage[y * uiWidth] = fSum * fScale;
     }
-    
+
     // main loop
-    for(int y = iRadius + 1; y < uiHeight - iRadius; y++) 
+    for(int y = iRadius + 1; y < uiHeight - iRadius; y++)
     {
         fSum += fInputImage[(y + iRadius) * uiWidth];
         fSum -= fInputImage[((y - iRadius) * uiWidth) - uiWidth];
@@ -674,7 +674,7 @@ __kernel void BoxCols_32F(__global float* fInputImage,
     }
 
     // do right edge
-    for (int y = uiHeight - iRadius; y < uiHeight; y++) 
+    for (int y = uiHeight - iRadius; y < uiHeight; y++)
     {
         fSum += fInputImage[(uiHeight - 1) * uiWidth];
         fSum -= fInputImage[((y - iRadius) * uiWidth) - uiWidth];

@@ -6,7 +6,7 @@
    Copyright (c) 2016 Charlie Leech, University of Southampton.
    All rights reserved.
   ---------------------------------------------------------------------------*/
-  
+
 #define UCHAR_MAX 	255
 #define USHRT_MAX 	65535
 #define FLT_MAX 	0x1.fffffep127f

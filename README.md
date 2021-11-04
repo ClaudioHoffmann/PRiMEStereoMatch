@@ -1,10 +1,10 @@
 # PRiMEStereoMatch
 
-**Please use these citations in your publication if you use this work:** ([bibtex here](https://github.com/PRiME-project/PRiMEStereoMatch#license))  
+**Please use these citations in your publication if you use this work:** ([bibtex here](https://github.com/PRiME-project/PRiMEStereoMatch#license))
 
-Charles Leech, Charan Kumar, Amit Acharyya, Sheng Yang, Geoff V. Merrett, and Bashir M. Al-Hashimi. 2017. Runtime Performance and Power Optimization of Parallel Disparity Estimation on Many-Core Platforms. ACM Transactions on Embedded Computing Systems (TECS) Volume 17 Issue 2, Article 41 (November 2017), 19 pages. DOI: https://doi.org/10.1145/3133560  
+Charles Leech, Charan Kumar, Amit Acharyya, Sheng Yang, Geoff V. Merrett, and Bashir M. Al-Hashimi. 2017. Runtime Performance and Power Optimization of Parallel Disparity Estimation on Many-Core Platforms. ACM Transactions on Embedded Computing Systems (TECS) Volume 17 Issue 2, Article 41 (November 2017), 19 pages. DOI: https://doi.org/10.1145/3133560
 
-Leech, Charles (2018) [Runtime energy management of multi-core processors.](https://eprints.soton.ac.uk/422287/) University of Southampton, Doctoral Thesis, 293pp. 
+Leech, Charles (2018) [Runtime energy management of multi-core processors.](https://eprints.soton.ac.uk/422287/) University of Southampton, Doctoral Thesis, 293pp.
 
 ---
 <p align="center">
@@ -16,9 +16,9 @@ Leech, Charles (2018) [Runtime energy management of multi-core processors.](http
 A heterogeneous and fully parallel stereo matching algorithm for depth estimation. Stereo Matching is based on the disparity estimation algorithm, an algorithm designed to calculate 3D depth information about a scene from a pair of 2D images captured by a stereoscopic camera. The algorithm contains the following stages:
 
 * Cost Volume Construction - weighted absolute difference of colours and gradients function.
-* Cost Volume Filtering - Adaptive Support Weight (ADSW) Guided Image Filter (GIF) function.  
-* Disparity Selection - Winner-Takes-All (WTA) minimum cost selection.  
-* Post Processing - left-right occlusion check, invalid pixel replacement and weight-median filtering.  
+* Cost Volume Filtering - Adaptive Support Weight (ADSW) Guided Image Filter (GIF) function.
+* Disparity Selection - Winner-Takes-All (WTA) minimum cost selection.
+* Post Processing - left-right occlusion check, invalid pixel replacement and weight-median filtering.
 
 <p align="center">
 <img src="docs/de_bd.png" alt="Disparity estimation process block diagram" width=80%>
@@ -26,9 +26,9 @@ A heterogeneous and fully parallel stereo matching algorithm for depth estimatio
 
 ## Implementation Details
 
-* All stages of the algorithm have been developed in both C++ and OpenCL.  
-	* C++ parallelism is introduced via the POSIX threads (pthreads) library. Disparity level parallelism is supported, enabling up to 64 concurrent threads.  
-	* OpenCL parallelism is inherent through the concurrent execution of kernels on an OpenCL-compatible device. The optimum level of parallelism will be bounded by the platform & devices.  
+* All stages of the algorithm have been developed in both C++ and OpenCL.
+	* C++ parallelism is introduced via the POSIX threads (pthreads) library. Disparity level parallelism is supported, enabling up to 64 concurrent threads.
+	* OpenCL parallelism is inherent through the concurrent execution of kernels on an OpenCL-compatible device. The optimum level of parallelism will be bounded by the platform & devices.
 * Support for live video disparity estimation using the OpenCV VideoCapture interface as well as static image computation.
 * Additional integration of the OpenCV Semi-Global Block Matching (SGBM) algorithm.
 
@@ -44,13 +44,13 @@ A heterogeneous and fully parallel stereo matching algorithm for depth estimatio
 	* OpenCL Library for execution on the GPU
 	* cmake v3.2, git
 
-### Compilation 
+### Compilation
 * Clone repo to the platform: `git clone https://github.com/PRiME-project/PRiMEStereoMatch.git`
 * Enter the base directory: `cd PRiMEStereoMatch/`.
 * Create a build directory: `mkdir build`
 * Enter the build directory: `cd build`
 * Invoke cmake to build the compilation files: `cmake ..` (Two dots are required in order to reference the base directory)
-* Compile the project with the generated makefile: `make -jN`. 
+* Compile the project with the generated makefile: `make -jN`.
 	* Set N to the number of simultaneous threads supported on your compilation platform, e.g. `make -j8`.
 
 ### Deployment
@@ -99,7 +99,7 @@ folders:
 	docs			- images for the readme & wiki
 	include			- Project header files (h/hpp)
 	src			- Project source files (c/cpp)
-	
+
 files:
 	CMakeLists.txt		- cmake project compilation file
 	LICENCE.txt			- license file
@@ -118,15 +118,15 @@ Some components of the application are based on source code from the following l
 
 ### Literature
 
-The algorithm in this work is based in parts on those presented in the following publications:  
+The algorithm in this work is based in parts on those presented in the following publications:
 
 <a name="Hosni2011CVPR">[Hosni2011CVPR]</a>: C. Rhemann, A. Hosni, M. Bleyer, C. Rother, and M. Gelautz. Fast cost-volume filtering for visual correspondence and beyond. In CVPR, 2011
 
-<a name="Hosni2011ICME">[Hosni2011ICME]</a>: A. Hosni, M. Bleyer, C. Rhemann, M. Gelautz and C. Rother, Real-time local stereo matching using guided image filtering, in Multimedia and Expo (ICME), 2011 IEEE International Conference on, Barcelona, 2011. 
+<a name="Hosni2011ICME">[Hosni2011ICME]</a>: A. Hosni, M. Bleyer, C. Rhemann, M. Gelautz and C. Rother, Real-time local stereo matching using guided image filtering, in Multimedia and Expo (ICME), 2011 IEEE International Conference on, Barcelona, 2011.
 
-<a name="Ttofis2014">[Ttofis2014]</a>: C. Ttofis and T. Theocharides, High-quality real-time hardware stereo matching based on guided image filtering, in Design, Automation and Test in Europe Conference and Exhibition (DATE), Dresden, 2014. 
+<a name="Ttofis2014">[Ttofis2014]</a>: C. Ttofis and T. Theocharides, High-quality real-time hardware stereo matching based on guided image filtering, in Design, Automation and Test in Europe Conference and Exhibition (DATE), Dresden, 2014.
 
-<a name="He2012">[He2012]</a>: K. He, J. Sun and X. Tang, Guided Image Filtering, Pattern Analysis and Machine Intelligence, IEEE Transactions on, pp. 1397-1409, 02 October 2012. 
+<a name="He2012">[He2012]</a>: K. He, J. Sun and X. Tang, Guided Image Filtering, Pattern Analysis and Machine Intelligence, IEEE Transactions on, pp. 1397-1409, 02 October 2012.
 
 ## License
 
@@ -134,7 +134,7 @@ This software is released under the BSD 3 Clause License. See LICENSE.txt for de
 
 To cite this code in your work, please also include the following reference:
 
-Charles Leech, Charan Kumar, Amit Acharyya, Sheng Yang, Geoff V. Merrett, and Bashir M. Al-Hashimi. 2017. Runtime Performance and Power Optimization of Parallel Disparity Estimation on Many-Core Platforms. ACM Transactions on Embedded Computing Systems (TECS) Volume 17 Issue 2, Article 41 (November 2017), 19 pages. DOI: https://doi.org/10.1145/3133560 
+Charles Leech, Charan Kumar, Amit Acharyya, Sheng Yang, Geoff V. Merrett, and Bashir M. Al-Hashimi. 2017. Runtime Performance and Power Optimization of Parallel Disparity Estimation on Many-Core Platforms. ACM Transactions on Embedded Computing Systems (TECS) Volume 17 Issue 2, Article 41 (November 2017), 19 pages. DOI: https://doi.org/10.1145/3133560
 
 Bibtex:
 ```
@@ -157,5 +157,5 @@ Bibtex:
  publisher = {ACM},
  address = {New York, NY, USA},
  keywords = {Runtime management, computer vision, many-core platforms, power optimization},
-} 
+}
 ```
