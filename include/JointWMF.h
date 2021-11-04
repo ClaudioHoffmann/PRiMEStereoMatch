@@ -409,12 +409,6 @@ public:
 
 private:
 
-	static float get_rt(){
-		struct timespec realtime;
-		clock_gettime(CLOCK_MONOTONIC,&realtime);
-		return (float)(realtime.tv_sec*1000000+realtime.tv_nsec/1000);
-	}
-
 	/***************************************************************/
 	/* Function: updateBCB
 	 * Description: maintain the necklace table of BCB

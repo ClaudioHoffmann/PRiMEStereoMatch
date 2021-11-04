@@ -37,7 +37,7 @@ StereoMatch::StereoMatch(int argc, const char *argv[], int gotOpenCLDev) :
 	error_threshold = 4;
 	scale_factor = 3;
 
-	cvc_time_avg = 0;
+	cvc_time_avg = decltype(cvc_time_avg)::zero();
 	frame_count = 0;
 
 	if(media_mode == DE_VIDEO)
@@ -115,13 +115,15 @@ StereoMatch::~StereoMatch(void)
 //#############################################################################
 //# Complete GIF stereo matching process
 //#############################################################################
-int StereoMatch::compute(float& de_time_ms)
+int StereoMatch::compute(std::chrono::steady_clock::duration& de_time)
 {
+	using milliseconds = std::chrono::duration<float, std::micro>;
+
 #ifdef DEBUG_APP
 	std::cout << "Computing Depth Map" << std::endl;
 #endif // DEBUG_APP
 
-	float start_time = get_rt();
+	auto start_time = get_rt();
 	//#########################################################################
 	//# Frame Capture and Preprocessing (that we have to repeat)
 	//#########################################################################
@@ -206,39 +208,39 @@ int StereoMatch::compute(float& de_time_ms)
 
 		if(de_mode == OCV_DE || !gotOCLDev)
 		{
-			cvc_time = get_rt();
+			auto cvc_begin = get_rt();
 			SMDE->CostConst();
-			cvc_time = get_rt() - cvc_time;
+			cvc_time = get_rt() - cvc_begin;
 
-			cvf_time = get_rt();
+			auto cvf_begin = get_rt();
 			SMDE->CostFilter_FGF();
-			cvf_time = get_rt()- cvf_time;
+			cvf_time = get_rt()- cvf_begin;
 
-			dispsel_time = get_rt();
+			auto dispsel_begin = get_rt();
 			SMDE->DispSelect_CPU();
-			dispsel_time = get_rt() - dispsel_time;
+			dispsel_time = get_rt() - dispsel_begin;
 
-			pp_time = get_rt();
+			auto pp_begin = get_rt();
 			SMDE->PostProcess_CPU();
-			pp_time = get_rt() - pp_time;
+			pp_time = get_rt() - pp_begin;
 		}
 		else
 		{
-			cvc_time = get_rt();
+			auto cvc_begin = get_rt();
 			SMDE->CostConst_GPU();
-			cvc_time = get_rt() - cvc_time;
+			cvc_time = get_rt() - cvc_begin;
 
-			cvf_time = get_rt();
+			auto cvf_begin = get_rt();
 			SMDE->CostFilter_GPU();
-			cvf_time = get_rt()- cvf_time;
+			cvf_time = get_rt()- cvf_begin;
 
-			dispsel_time = get_rt();
+			auto dispsel_begin = get_rt();
 			SMDE->DispSelect_GPU();
-			dispsel_time = get_rt() - dispsel_time;
+			dispsel_time = get_rt() - dispsel_begin;
 
-			pp_time = get_rt();
+			auto pp_begin = get_rt();
 			SMDE->PostProcess_GPU();
-			pp_time = get_rt() - pp_time;
+			pp_time = get_rt() - pp_begin;
 		}
 #ifdef DEBUG_APP
 		std::cout <<  "Disparity Estimation Complete." << std::endl;
@@ -255,16 +257,20 @@ int StereoMatch::compute(float& de_time_ms)
 #ifdef DEBUG_APP_MONITORS
 		cvc_time_avg = (cvc_time_avg*frame_count + cvc_time)/(frame_count + 1);
 		printf("STEREO GIF Module Times:\n");
-		printf("CVC Time:\t %4.2f ms   Avg Time:\t %4.2f\n", cvc_time/1000, cvc_time_avg/1000);
-		printf("CVF Time:\t %4.2f ms\n",cvf_time/1000);
-		printf("DispSel Time:\t %4.2f ms\n",dispsel_time/1000);
-		printf("PP Time:\t %4.2f ms\n",pp_time/1000);
+		printf(
+			"CVC Time:\t %4.2f ms   Avg Time:\t %4.2f\n",
+			milliseconds(cvc_time).count(),
+			milliseconds(cvc_time_avg).count()
+		);
+		printf("CVF Time:\t %4.2f ms\n",milliseconds(cvf_time).count());
+		printf("DispSel Time:\t %4.2f ms\n",milliseconds(dispsel_time).count());
+		printf("PP Time:\t %4.2f ms\n",milliseconds(pp_time).count());
 #endif //DEBUG_APP_MONITORS
 		frame_count++;
 	}
 #ifdef DEBUG_APP_MONITORS
-	de_time_ms = (get_rt() - start_time)/1000;
-	printf("DE Time:\t %4.2f ms\n", de_time_ms);
+	de_time = (get_rt() - start_time);
+	printf("DE Time:\t %4.2f ms\n", milliseconds(de_time).count());
 #endif //DEBUG_APP_MONITORS
 
 #ifdef DEBUG_APP

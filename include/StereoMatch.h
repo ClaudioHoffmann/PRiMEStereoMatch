@@ -45,7 +45,7 @@ public:
 	int media_mode;
 	cv::Mat display_container;
 
-	int compute(float& de_time);
+	int compute(std::chrono::steady_clock::duration& de_time);
 	int update_dataset(std::string dataset_name);
 	bool user_dataset;
 
@@ -82,8 +82,8 @@ private:
     int maxDis;
 
     //stage & process time measurements
-    double cvc_time, cvf_time, dispsel_time, pp_time;
-    double cvc_time_avg, cvf_time_avg, dispsel_time_avg, pp_time_avg;
+    std::chrono::steady_clock::duration cvc_time, cvf_time, dispsel_time, pp_time;
+    std::chrono::steady_clock::duration cvc_time_avg, cvf_time_avg, dispsel_time_avg, pp_time_avg;
     unsigned int frame_count;
 
     //Frame Holders & Camera object

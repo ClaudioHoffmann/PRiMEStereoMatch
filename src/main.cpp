@@ -64,7 +64,7 @@ int main(int argc, const char* argv[])
 void getDepthMap(StereoMatch *sm)
 {
 	int ret = 0;
-	float de_time;
+	std::chrono::steady_clock::duration de_time;
 
 	while(!(end_de || ret)){
 		ret = sm->compute(de_time);
@@ -81,7 +81,6 @@ void HCI(StereoMatch *sm)
 {
 	//User interface input handler
     char key = ' ';
-	float de_time;
 	int dataset_idx = 0;
 
 #ifdef DISPLAY
