@@ -103,7 +103,7 @@ private:
 	cv::Mat imgDisparity16S;
 
 	//StereoGIF Variables
-	DispEst* SMDE;
+	std::unique_ptr<DispEst> SMDE;
 	int num_threads;
 
 	//Function prototypes
